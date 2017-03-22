@@ -1,0 +1,193 @@
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  font-size: 0; }
+
+#root {
+  background-image: url(../img/map_bg.png);
+  background-repeat: no-repeat;
+  -webkit-background-size: 100%;
+  background-size: 100%;
+  display: inline-block; }
+
+h1,
+p {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0; }
+
+div[data-reactroot] {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  overflow: hidden; }
+
+.new-task {
+  display: inline-block;
+  width: 35%;
+  height: 100%;
+  background-color: #fff;
+  opacity: 0;
+  min-width: 400px;
+  animation-duration: .5s;
+  animation-name: slideOut; }
+  .new-task.active {
+    animation-duration: .5s;
+    animation-name: slideIn;
+    opacity: 1; }
+  .new-task h1 {
+    font-size: 14px;
+    font-weight: 100;
+    width: 100%;
+    color: #ccc;
+    text-transform: uppercase;
+    margin: 0 0 20px; }
+  .new-task .add-task-block {
+    padding: 30px;
+    background-color: #F5F5F5;
+    border-bottom: 1px solid #D6D6D6; }
+    .new-task .add-task-block p {
+      font-size: 30px;
+      color: #000;
+      margin: 0 0 20px; }
+      .new-task .add-task-block p span {
+        font-weight: bold; }
+    .new-task .add-task-block a {
+      font-size: 24px;
+      text-decoration: none;
+      background-color: #4A7DD3;
+      color: #fff;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px; }
+  .new-task .service-type-block {
+    display: inline-block;
+    width: calc(100% - 60px);
+    padding: 30px;
+    border-bottom: 1px solid #D6D6D6; }
+    .new-task .service-type-block .service-type-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%; }
+      .new-task .service-type-block .service-type-wrap .service-single {
+        width: calc((100% - 40px) / 5);
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-flow: column nowrap; }
+        .new-task .service-type-block .service-type-wrap .service-single:first-child {
+          margin: 0; }
+        .new-task .service-type-block .service-type-wrap .service-single:hover > .img-wrap {
+          border: 1px solid #4A7DD3; }
+        .new-task .service-type-block .service-type-wrap .service-single.active > .img-wrap {
+          border: 1px solid #4A7DD3; }
+        .new-task .service-type-block .service-type-wrap .service-single p {
+          font-size: 12px; }
+        .new-task .service-type-block .service-type-wrap .service-single .img-wrap {
+          width: 65px;
+          height: 65px;
+          border: 1px solid #fff;
+          vertical-align: middle;
+          border-radius: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 0 0 10px 0; }
+  .new-task .plumber-task-block {
+    width: calc(100% - 60px);
+    padding: 30px;
+    display: flex;
+    justify-content: flex-start;
+    flex-flow: row wrap;
+    border-bottom: 1px solid #D6D6D6; }
+    .new-task .plumber-task-block .select-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      flex-flow: row wrap; }
+    .new-task .plumber-task-block span {
+      cursor: pointer;
+      padding: 10px 15px;
+      border: 1px solid #fff;
+      border-radius: 20px;
+      margin: 0 10px 10px;
+      font-size: 14px; }
+      .new-task .plumber-task-block span:hover, .new-task .plumber-task-block span.active {
+        border: 1px solid #4A7DD3; }
+
+.task-list {
+  width: calc(30% - 30px);
+  margin: 0 0 0 30px;
+  padding: 10px 0 0;
+  max-height: 100%;
+  overflow-y: auto;
+  height: calc(100% - 10px);
+  display: inline-block;
+  text-align: center; }
+  .task-list .todo {
+    display: inline-block;
+    width: calc(100% - 50px);
+    text-align: left;
+    padding: 20px;
+    margin: 0 0 10px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.75);
+    transition: .6s; }
+    .task-list .todo:last-child {
+      margin: 0; }
+    .task-list .todo:first-child {
+      justify-content: center; }
+    .task-list .todo.add-todo-button {
+      cursor: pointer; }
+    .task-list .todo p {
+      font-family: sans-serif;
+      font-size: 16px;
+      width: 100%;
+      margin: 0 0 10px; }
+      .task-list .todo p.new-todo {
+        text-transform: uppercase;
+        font-size: 20px;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        color: #4A7DD3; }
+    .task-list .todo a {
+      font-family: sans-serif;
+      font-size: 14px;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 5px 10px;
+      background-color: #4A7DD3;
+      border: 1px solid #4A7DD3;
+      margin: 0 10px 0 0;
+      color: #fff;
+      border-radius: 4px; }
+      .task-list .todo a:last-child {
+        margin: 0;
+        background-color: #fff;
+        color: #4A7DD3; }
+
+@keyframes slideIn {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+@keyframes slideOut {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
