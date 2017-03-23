@@ -1,17 +1,39 @@
 import '../scss/main.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
+import { createStore, compose } from 'redux';
+import { Provider, connect } from 'react-redux';
 import App from './Components/App';
 import todoApp from './Reducers/Reducers';
+import { render } from 'react-dom'
+import { loadState, saveState } from './state/localStorage'
 
-let store = createStore(todoApp);
+const defaultState = loadState();
 
-let rootElement = document.getElementById('root');
+const Store = createStore(
+  todoApp,
+  defaultState,
+  compose(
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+  )
+);
 
-ReactDOM.render(
-  <Provider store={store}>
+Store.subscribe(() => {
+  saveState(Store.getState());
+});
+
+function mapStateToProps(state) {
+  return { store: state }
+}
+
+
+
+export default connect(mapStateToProps)(App)
+
+const rootElement = document.getElementById('root');
+
+render(
+  <Provider store={Store}>
     <App />
   </Provider>,
   rootElement

@@ -46,6 +46,10 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	__webpack_require__(1);
 
 	var _react = __webpack_require__(6);
@@ -64,19 +68,36 @@
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _Reducers = __webpack_require__(227);
+	var _Reducers = __webpack_require__(226);
 
 	var _Reducers2 = _interopRequireDefault(_Reducers);
 
+	var _localStorage = __webpack_require__(228);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var store = (0, _redux.createStore)(_Reducers2.default);
+	var defaultState = (0, _localStorage.loadState)();
+
+	var Store = (0, _redux.createStore)(_Reducers2.default, defaultState, (0, _redux.compose)(window.devToolsExtension ? window.devToolsExtension() : function (f) {
+	  return f;
+	}));
+
+	Store.subscribe(function () {
+	  (0, _localStorage.saveState)(Store.getState());
+	});
+
+	function mapStateToProps(state) {
+	  return { store: state };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_App2.default);
+
 
 	var rootElement = document.getElementById('root');
 
-	_reactDom2.default.render(_react2.default.createElement(
+	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRedux.Provider,
-	  { store: store },
+	  { store: Store },
 	  _react2.default.createElement(_App2.default, null)
 	), rootElement);
 
@@ -23940,10 +23961,6 @@
 
 	var _TodoList2 = _interopRequireDefault(_TodoList);
 
-	var _Filter = __webpack_require__(226);
-
-	var _Filter2 = _interopRequireDefault(_Filter);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23951,8 +23968,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	// import Todo from './Todo';
-
 
 	var App = function (_Component) {
 	  _inherits(App, _Component);
@@ -23968,21 +23983,29 @@
 	    value: function render() {
 	      var _props = this.props,
 	          dispatch = _props.dispatch,
-	          visibleTodos = _props.visibleTodos,
-	          visibilityFilter = _props.visibilityFilter;
+	          todos = _props.todos,
+	          blockState = _props.blockState;
 
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(_TodoList2.default, {
-	          todos: visibleTodos,
+	          todos: todos,
 	          onTodoClick: function onTodoClick(index) {
 	            return dispatch((0, _Actions.actionTodo)(index));
-	          } }),
+	          },
+	          newTaskBlockToggle: function newTaskBlockToggle() {
+	            return dispatch((0, _Actions.newTaskBlockToggle)());
+	          },
+	          removeTodoClick: function removeTodoClick(index) {
+	            return dispatch((0, _Actions.removeTodo)(index));
+	          }
+	        }),
 	        _react2.default.createElement(_AddTodo2.default, {
 	          onAddClick: function onAddClick(text) {
 	            return dispatch((0, _Actions.addTodo)(text));
-	          } })
+	          }
+	        })
 	      );
 	    }
 	  }]);
@@ -23993,26 +24016,15 @@
 	App.propTypes = {
 	  visibleTodos: _react.PropTypes.arrayOf(_react.PropTypes.shape({
 	    text: _react.PropTypes.string.isRequired,
-	    completed: _react.PropTypes.bool.isRequired
-	  })),
-	  visibilityFilter: _react.PropTypes.oneOf(['SHOW_ALL', 'SHOW_COMPLETED', 'SHOW_ACTIVE']).isRequired
+	    completed: _react.PropTypes.bool.isRequired,
+	    index: _react.PropTypes.number.isRequired
+	  }))
 	};
-
-	function selectTodos(todos, filter) {
-	  switch (filter) {
-	    case _Actions.VisibilityFilters.SHOW_ALL:
-	      return todos;
-	    case _Actions.VisibilityFilters.SHOW_COMPLETED:
-	      return todos.filter(function (todo) {
-	        return todo.completed;
-	      });
-	  }
-	}
 
 	function select(state) {
 	  return {
-	    visibleTodos: selectTodos(state.todos, state.visibilityFilter),
-	    visibilityFilter: state.visibilityFilter
+	    todos: state.todos,
+	    blockState: state.newTaskToggle
 	  };
 	}
 
@@ -24028,22 +24040,24 @@
 	  value: true
 	});
 	exports.addTodo = addTodo;
+	exports.newTaskBlockToggle = newTaskBlockToggle;
 	exports.actionTodo = actionTodo;
 	exports.removeTodo = removeTodo;
-	exports.setVisibilityFilter = setVisibilityFilter;
+	exports.editableTodo = editableTodo;
+	exports.saveTodo = saveTodo;
 	var ADD_TODO = exports.ADD_TODO = 'ADD_TODO';
 	var ACTION_TODO = exports.ACTION_TODO = 'ACTION_TODO';
 	var REMOVE_TODO = exports.REMOVE_TODO = 'REMOVE_TODO';
-	var SET_VISIBILITY_FILTER = exports.SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
-
-	var VisibilityFilters = exports.VisibilityFilters = {
-	  SHOW_ALL: 'SHOW_ALL',
-	  SHOW_COMPLETED: 'SHOW_COMPLETED',
-	  SHOW_ACTIVE: 'SHOW_ACTIVE'
-	};
+	var NEW_TASK_BLOCK_TOGGLE = exports.NEW_TASK_BLOCK_TOGGLE = 'NEW_TASK_BLOCK_TOGGLE';
+	var EDITABLE_TODO = exports.EDITABLE_TODO = 'EDITABLE_TODO';
+	var SAVE_TODO = exports.SAVE_TODO = 'SAVE_TODO';
 
 	function addTodo(text) {
 	  return { type: ADD_TODO, text: text };
+	}
+
+	function newTaskBlockToggle(action) {
+	  return { type: NEW_TASK_BLOCK_TOGGLE, action: action };
 	}
 
 	function actionTodo(index) {
@@ -24054,8 +24068,12 @@
 	  return { type: REMOVE_TODO, index: index };
 	}
 
-	function setVisibilityFilter(filter) {
-	  return { type: SET_VISIBILITY_FILTER, filter: filter };
+	function editableTodo(index) {
+	  return { type: EDITABLE_TODO, index: index };
+	}
+
+	function saveTodo(index, text) {
+	  return { type: SAVE_TODO, index: index, text: text };
 	}
 
 /***/ },
@@ -24073,6 +24091,8 @@
 	var _react = __webpack_require__(6);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(204);
 
 	var _reactDom = __webpack_require__(37);
 
@@ -24100,9 +24120,10 @@
 	    value: function render() {
 	      var _this2 = this;
 
+	      var tmp = this.props.blockState ? "new-task active" : "new-task";
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'new-task' },
+	        { className: tmp },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'add-task-block' },
@@ -24280,17 +24301,6 @@
 	        )
 	      );
 	    }
-
-	    // selectTodoComponents(event) {
-	    //   const componentsBlock = event.target.querySelectorAll('.todo-element');
-	    //   [].map.call(componentsBlock, function (obj) {
-	    //     obj.onclick = function(event) {
-	    //       console.log(obj)
-	    //     }
-	    //   })
-	    //
-	    // }
-
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
@@ -24350,12 +24360,17 @@
 	  return AddTodo;
 	}(_react.Component);
 
-	exports.default = AddTodo;
-
+	function select(state) {
+	  return {
+	    blockState: state.newTaskToggle.blockState
+	  };
+	}
 
 	AddTodo.propTypes = {
 	  onAddClick: _react.PropTypes.func.isRequired
 	};
+
+	exports.default = (0, _reactRedux.connect)(select)(AddTodo);
 
 /***/ },
 /* 224 */
@@ -24407,8 +24422,8 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'todo add-todo-button',
-	            onClick: function onClick(e) {
-	              return _this2.toggleAddTodo();
+	            onClick: function onClick() {
+	              return _this2.props.newTaskBlockToggle();
 	            } },
 	          _react2.default.createElement(
 	            'p',
@@ -24423,41 +24438,13 @@
 	              return _this2.props.onTodoClick(index);
 	            },
 	            onRemove: function onRemove() {
-	              return _this2.props.onTodoClick(index);
-	            }
+	              return _this2.props.removeTodoClick(index);
+	            },
+	            isEdit: todo.isEdit,
+	            index: index
 	          }));
 	        })
 	      );
-	    }
-	  }, {
-	    key: 'toggleAddTodo',
-	    value: function toggleAddTodo() {
-	      var addTodoBlock = document.querySelector('div.new-task');
-	      if (!hasClass(addTodoBlock, 'active')) {
-	        addClass(addTodoBlock, 'active');
-	      } else {
-	        removeClass(addTodoBlock, 'active');
-	      }
-
-	      /* Helpful function */
-
-	      function hasClass(target, className) {
-	        return new RegExp('(\\s|^)' + className + '(\\s|$)').test(target.className);
-	      }
-
-	      function addClass(o, c) {
-	        var re = new RegExp("(^|\\s)" + c + "(\\s|$)", "g");
-	        if (re.test(o.className)) return;
-	        o.className = (o.className + " " + c).replace(/\s+/g, " ").replace(/(^ | $)/g, "");
-	      }
-
-	      function removeClass(o, c) {
-	        var re = new RegExp("(^|\\s)" + c + "(\\s|$)", "g");
-	        if (o == false) {
-	          return true;
-	        }
-	        o.className = o.className.replace(re, "$1").replace(/\s+/g, " ").replace(/(^ | $)/g, "");
-	      }
 	    }
 	  }]);
 
@@ -24473,6 +24460,7 @@
 	    text: _react.PropTypes.string.isRequired,
 	    completed: _react.PropTypes.bool.isRequired
 	  }).isRequired).isRequired
+
 	};
 
 /***/ },
@@ -24491,11 +24479,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Actions = __webpack_require__(222);
+	var _reactRedux = __webpack_require__(204);
+
+	var _redux = __webpack_require__(183);
 
 	var _reactDom = __webpack_require__(37);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _Actions = __webpack_require__(222);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24509,30 +24501,45 @@
 	  _inherits(Todo, _Component);
 
 	  function Todo() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
 	    _classCallCheck(this, Todo);
 
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Todo.__proto__ || Object.getPrototypeOf(Todo)).call.apply(_ref, [this].concat(args))), _this), _this.handleDelete = function (ev) {
-	      ev.preventDefault();
-	      _this.props.onTodoClick(event.target);
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    return _possibleConstructorReturn(this, (Todo.__proto__ || Object.getPrototypeOf(Todo)).apply(this, arguments));
 	  }
 
 	  _createClass(Todo, [{
 	    key: 'render',
+
+
+	    /*constructor(props) {
+	      super(props)
+	      this.state = {
+	        text: this.props.isEdit
+	      };
+	    }*/
+
+	    /*getInitialState() {
+	      return {
+	        text: <p>{this.props.text}</p>
+	      };
+	    }*/
+
+	    /*componentWillReceiveProps(nextProps) {
+	      if ( this.props.isEdit ) {
+	        console.log(this.props)
+	        this.setState({
+	          text: !this.state.text
+	        })
+	      }
+	    }*/
+
 	    value: function render() {
-	      console.log(this.props);
+	      var _this2 = this;
+
+	      var tmp = this.props.isEdit ? 'is-edit' : '';
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'todo',
-	          onClick: this.props.onClick,
+	        { className: 'todo ' + tmp,
+	          id: this.props.index,
 	          style: {
 	            opacity: this.props.completed ? 0.5 : 1,
 	            cursor: this.props.completed ? 'default' : 'pointer'
@@ -24542,31 +24549,63 @@
 	          null,
 	          this.props.text
 	        ),
+	        _react2.default.createElement('input', { type: 'text', defaultValue: this.props.text }),
 	        _react2.default.createElement(
 	          'a',
-	          { href: '#0' },
+	          { href: '#0',
+	            className: tmp,
+	            onClick: function onClick() {
+	              return _this2.props.editableTodo(_this2.props.index);
+	            } },
 	          'EDIT'
 	        ),
 	        _react2.default.createElement(
 	          'a',
-	          { href: '#0' },
+	          { href: '#0',
+	            className: this.props.isEdit ? '' : 'is-edit',
+	            onClick: function onClick(e) {
+	              return _this2.saveTodoText(e);
+	            } },
+	          'SAVE'
+	        ),
+	        _react2.default.createElement(
+	          'a',
+	          { href: '#0',
+	            onClick: function onClick(index) {
+	              return _this2.props.onRemove(index);
+	            }
+	          },
 	          'DELETE'
 	        )
 	      );
+	    }
+	  }, {
+	    key: 'saveTodoText',
+	    value: function saveTodoText(e) {
+	      var parentBlock = document.getElementById(this.props.index).querySelector('input').value;
+	      console.log(parentBlock);
+	      this.props.editableTodo(this.props.index);
+	      this.props.saveTodo(this.props.index, parentBlock);
 	    }
 	  }]);
 
 	  return Todo;
 	}(_react.Component);
 
-	exports.default = Todo;
-
-
 	Todo.propTypes = {
 	  onClick: _react.PropTypes.func.isRequired,
 	  text: _react.PropTypes.string.isRequired,
 	  completed: _react.PropTypes.bool.isRequired
 	};
+
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    editableTodo: (0, _redux.bindActionCreators)(_Actions.editableTodo, dispatch),
+	    saveTodo: (0, _redux.bindActionCreators)(_Actions.saveTodo, dispatch)
+	  };
+	}
+
+	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(Todo);
 
 /***/ },
 /* 226 */
@@ -24578,118 +24617,42 @@
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(6);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Filter = function (_Component) {
-	  _inherits(Filter, _Component);
-
-	  function Filter() {
-	    _classCallCheck(this, Filter);
-
-	    return _possibleConstructorReturn(this, (Filter.__proto__ || Object.getPrototypeOf(Filter)).apply(this, arguments));
-	  }
-
-	  _createClass(Filter, [{
-	    key: 'renderFilter',
-	    value: function renderFilter(filter, name) {
-	      var _this2 = this;
-
-	      if (filter === this.props.filter) {
-	        return name;
-	      }
-
-	      return _react2.default.createElement(
-	        'a',
-	        { href: '#', onClick: function onClick(e) {
-	            e.preventDefault();
-	            _this2.props.onFilterChange(filter);
-	          } },
-	        name
-	      );
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'p',
-	        null,
-	        'Show:',
-	        ' ',
-	        this.renderFilter('SHOW_ALL', 'All'),
-	        ', ',
-	        this.renderFilter('SHOW_COMPLETED', 'Completed'),
-	        ', ',
-	        this.renderFilter('SHOW_ACTIVE', 'Active'),
-	        '.'
-	      );
-	    }
-	  }]);
-
-	  return Filter;
-	}(_react.Component);
-
-	exports.default = Filter;
-
-
-	Filter.propTypes = {
-	  onFilterChange: _react.PropTypes.func.isRequired,
-	  filter: _react.PropTypes.oneOf(['SHOW_ALL', 'SHOW_COMPLETED', 'SHOW_ACTIVE']).isRequired
-	};
-
-/***/ },
-/* 227 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _redux = __webpack_require__(183);
 
 	var _Actions = __webpack_require__(222);
 
+	var _store = __webpack_require__(227);
+
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-	var SHOW_ALL = _Actions.VisibilityFilters.SHOW_ALL;
-
-
-	function visibilityFilter() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : SHOW_ALL;
+	function newTaskToggle() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { blockState: _store.blockState };
 	  var action = arguments[1];
 
 	  switch (action.type) {
-	    case _Actions.SET_VISIBILITY_FILTER:
-	      return action.filter;
+	    case _Actions.NEW_TASK_BLOCK_TOGGLE:
+	      return _extends({}, state, {
+	        blockState: !state.blockState
+	      });
 	    default:
 	      return state;
 	  }
 	}
 
 	function todos() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { initialTodoState: _store.initialTodoState };
 	  var action = arguments[1];
+
 
 	  switch (action.type) {
 	    case _Actions.ADD_TODO:
 	      {
 	        return [].concat(_toConsumableArray(state), [{
 	          text: action.text,
-	          completed: false /*,
-	                           removed: false*/
+	          completed: false,
+	          isEdit: false
 	        }]);
 	      }
 	    case _Actions.ACTION_TODO:
@@ -24701,14 +24664,25 @@
 	      }
 	    case _Actions.REMOVE_TODO:
 	      {
-
-	        console.log(state);
-
-	        var todoId = action.text;
-
-	        // return ...state.filter( todo.index !== todoId)
-
-	        // return stateAsign(state, removed, action)
+	        return [].concat(_toConsumableArray(state.slice(0, action.index)), _toConsumableArray(state.slice(action.index + 1)));
+	      }
+	    case _Actions.EDITABLE_TODO:
+	      {
+	        var isEdit = {
+	          isEdit: !state[action.index].isEdit
+	        };
+	        return stateAsign(state, isEdit, action);
+	      }
+	    case _Actions.SAVE_TODO:
+	      {
+	        console.log(action);
+	        state.map(function (todo, index) {
+	          console.log(index, action.index);
+	          if (index === action.index) {
+	            todo.text = action.text;
+	          }
+	        });
+	        return state;
 	      }
 	    default:
 	      return state;
@@ -24720,11 +24694,63 @@
 	}
 
 	var todoApp = (0, _redux.combineReducers)({
-	  visibilityFilter: visibilityFilter,
-	  todos: todos
+	  todos: todos,
+	  newTaskToggle: newTaskToggle
 	});
 
 	exports.default = todoApp;
+
+/***/ },
+/* 227 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var initialTodoState = exports.initialTodoState = {
+	  'todos': {
+	    'text': '',
+	    'completed': false,
+	    'isEdit': false
+	  }
+	};
+
+	var blockState = exports.blockState = {
+	  'blockState': false
+	};
+
+/***/ },
+/* 228 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var loadState = exports.loadState = function loadState() {
+	  try {
+	    var todos = localStorage.getItem('TodoList');
+	    if (todos === null) {
+	      return {};
+	    }
+	    return JSON.parse(todos).state;
+	  } catch (err) {
+	    return {};
+	  }
+	};
+
+	var saveState = exports.saveState = function saveState(state) {
+	  try {
+	    var todos = JSON.stringify({ state: state });
+
+	    localStorage.setItem('TodoList', todos);
+	  } catch (err) {
+	    // Ignore errors
+	  }
+	};
 
 /***/ }
 /******/ ]);

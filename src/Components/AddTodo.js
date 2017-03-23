@@ -1,10 +1,12 @@
 import React, { findDOMNode, Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 
-export default class AddTodo extends Component {
+class AddTodo extends Component {
   render() {
+    const tmp = this.props.blockState ? "new-task active" : "new-task";
     return (
-      <div className="new-task">
+      <div className={tmp}>
         <div className="add-task-block">
           <h1>NEW TASK</h1>
           <p className="todo-text">I need <span className="service-type"></span> to <span className="plumber-task"></span></p>
@@ -12,11 +14,6 @@ export default class AddTodo extends Component {
              onClick={e => this.handleClick(e)}>
             CREATE TASK
           </a>
-          {/*<input type='text' ref='input' />
-
-          <button onClick={e => this.handleClick(e)}>
-            Add
-          </button>*/}
         </div>
 
         <div className="service-type-block">
@@ -81,16 +78,6 @@ export default class AddTodo extends Component {
     );
   }
 
-  // selectTodoComponents(event) {
-  //   const componentsBlock = event.target.querySelectorAll('.todo-element');
-  //   [].map.call(componentsBlock, function (obj) {
-  //     obj.onclick = function(event) {
-  //       console.log(obj)
-  //     }
-  //   })
-  //
-  // }
-
   componentDidMount() {
     const componentsBlock = document.querySelectorAll('.todo-element');
     [].map.call(componentsBlock, function (obj) {
@@ -136,7 +123,7 @@ export default class AddTodo extends Component {
 
   handleClick(e) {
     const textBlock = document.querySelector('p.todo-text'),
-      text = textBlock.innerText.trim();
+      text = textBlock.innerText.trim()
     this.props.onAddClick(text);
     textBlock.querySelectorAll('span').forEach(function(item, i, arr) {
       item.innerText = ''
@@ -144,6 +131,14 @@ export default class AddTodo extends Component {
   }
 }
 
+function select(state) {
+  return {
+    blockState: state.newTaskToggle.blockState
+  };
+}
+
 AddTodo.propTypes = {
   onAddClick: PropTypes.func.isRequired
 };
+
+export default connect(select)(AddTodo)

@@ -37,11 +37,8 @@ div[data-reactroot] {
   background-color: #fff;
   opacity: 0;
   min-width: 400px;
-  animation-duration: .5s;
-  animation-name: slideOut;
+  transition: .5s;
   &.active {
-    animation-duration: .5s;
-    animation-name: slideIn;
     opacity: 1;
   }
   h1 {
@@ -175,6 +172,14 @@ div[data-reactroot] {
     &:first-child {
       justify-content: center;
     }
+    &.is-edit {
+      p {
+        display: none;
+      }
+      input {
+        display: block;
+      }
+    }
     &.add-todo-button {
       cursor: pointer;
     }
@@ -182,7 +187,7 @@ div[data-reactroot] {
       font-family: sans-serif;
       font-size: 16px;
       width: 100%;
-      margin: 0 0 10px;
+      margin: 0 0 15px;
       &.new-todo {
         text-transform: uppercase;
         font-size: 20px;
@@ -191,6 +196,10 @@ div[data-reactroot] {
         margin: 0;
         color: #4A7DD3;
       }
+    }
+    input {
+      display: none;
+      margin: 0 0 15px;
     }
     a {
       font-family: sans-serif;
@@ -208,24 +217,9 @@ div[data-reactroot] {
         background-color: #fff;
         color: #4A7DD3;
       }
+      &.is-edit {
+        display: none;
+      }
     }
-  }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
   }
 }
