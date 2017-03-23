@@ -32,12 +32,14 @@ class Todo extends Component {
     const tmp = this.props.isEdit ? 'is-edit' : '';
     return (
       <div className={'todo ' + tmp}
-           id={this.props.index}
-           style={{
-             opacity: this.props.completed ? 0.5 : 1,
+           id={this.props.index}>
+        <p style={{
+             textDecoration: this.props.completed ? 'line-through' : 'none',
              cursor: this.props.completed ? 'default' : 'pointer'
-           }}>
-        <p>{this.props.text}</p>
+           }}
+           onClick={this.props.onClick}>
+          {this.props.text}
+        </p>
         <input type="text" defaultValue={this.props.text}/>
         <a href="#0"
            className={tmp}
@@ -53,10 +55,9 @@ class Todo extends Component {
   }
 
   saveTodoText(e) {
-    let parentBlock = document.getElementById(this.props.index).querySelector('input').value;
-    console.log(parentBlock)
+    let text = document.getElementById(this.props.index).querySelector('input').value;
     this.props.editableTodo(this.props.index);
-    this.props.saveTodo(this.props.index, parentBlock);
+    this.props.saveTodo(this.props.index, text);
   }
 
 }

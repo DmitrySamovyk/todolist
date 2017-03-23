@@ -24539,14 +24539,14 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'todo ' + tmp,
-	          id: this.props.index,
-	          style: {
-	            opacity: this.props.completed ? 0.5 : 1,
-	            cursor: this.props.completed ? 'default' : 'pointer'
-	          } },
+	          id: this.props.index },
 	        _react2.default.createElement(
 	          'p',
-	          null,
+	          { style: {
+	              textDecoration: this.props.completed ? 'line-through' : 'none',
+	              cursor: this.props.completed ? 'default' : 'pointer'
+	            },
+	            onClick: this.props.onClick },
 	          this.props.text
 	        ),
 	        _react2.default.createElement('input', { type: 'text', defaultValue: this.props.text }),
@@ -24582,10 +24582,9 @@
 	  }, {
 	    key: 'saveTodoText',
 	    value: function saveTodoText(e) {
-	      var parentBlock = document.getElementById(this.props.index).querySelector('input').value;
-	      console.log(parentBlock);
+	      var text = document.getElementById(this.props.index).querySelector('input').value;
 	      this.props.editableTodo(this.props.index);
-	      this.props.saveTodo(this.props.index, parentBlock);
+	      this.props.saveTodo(this.props.index, text);
 	    }
 	  }]);
 
