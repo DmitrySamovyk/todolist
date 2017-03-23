@@ -6,28 +6,6 @@ import { editableTodo, saveTodo } from '../Actions/Actions';
 
 class Todo extends Component {
 
-  /*constructor(props) {
-    super(props)
-    this.state = {
-      text: this.props.isEdit
-    };
-  }*/
-
-  /*getInitialState() {
-    return {
-      text: <p>{this.props.text}</p>
-    };
-  }*/
-
-  /*componentWillReceiveProps(nextProps) {
-    if ( this.props.isEdit ) {
-      console.log(this.props)
-      this.setState({
-        text: !this.state.text
-      })
-    }
-  }*/
-
   render() {
     const tmp = this.props.isEdit ? 'is-edit' : '';
     return (
@@ -64,8 +42,13 @@ class Todo extends Component {
 
 Todo.propTypes = {
   onClick: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  editableTodo: PropTypes.func.isRequired,
+  saveTodo: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
   text: PropTypes.string.isRequired,
-  completed: PropTypes.bool.isRequired
+  completed: PropTypes.bool.isRequired,
+  isEdit: PropTypes.bool.isRequired
 };
 
 function mapDispatchToProps(dispatch) {

@@ -6,7 +6,7 @@ import TodoList from './TodoList';
 
 class App extends Component {
   render() {
-    const { dispatch, todos, blockState } = this.props;
+    const { dispatch, todos } = this.props;
     return (
       <div>
 
@@ -38,6 +38,5 @@ function select(state) {
     blockState: state.newTaskToggle
   };
 }
-
 
 export default connect(select)(App);

@@ -1,7 +1,7 @@
 import '../scss/main.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, compose } from 'redux';
+import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
 import App from './Components/App';
 import todoApp from './Reducers/Reducers';
@@ -12,10 +12,7 @@ const defaultState = loadState();
 
 const Store = createStore(
   todoApp,
-  defaultState,
-  compose(
-    window.devToolsExtension ? window.devToolsExtension() : f => f
-  )
+  defaultState
 );
 
 Store.subscribe(() => {
@@ -25,8 +22,6 @@ Store.subscribe(() => {
 function mapStateToProps(state) {
   return { store: state }
 }
-
-
 
 export default connect(mapStateToProps)(App)
 

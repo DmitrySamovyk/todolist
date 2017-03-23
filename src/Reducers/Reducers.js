@@ -43,9 +43,7 @@ function todos(state = {initialTodoState}, action) {
       return stateAsign(state, isEdit, action)
     }
     case SAVE_TODO: {
-      console.log(action)
       state.map(function (todo, index) {
-        console.log(index, action.index)
         if ( index === action.index ) {
           todo.text = action.text
         }

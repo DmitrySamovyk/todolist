@@ -28,8 +28,11 @@ export default class TodoList extends Component {
 TodoList.propTypes = {
   onTodoClick: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.shape({
+    onClick: PropTypes.func.isRequired,
+    onRemove: PropTypes.func.isRequired,
+    index: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired
+    completed: PropTypes.bool.isRequired,
+    isEdit: PropTypes.bool.isRequired
   }).isRequired).isRequired
-
 };
