@@ -24139,7 +24139,7 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      var tmp = this.props.blockState ? "new-task active" : "new-task";
+	      var tmp = this.props.blockState ? "new-task" : "new-task active";
 	      return _react2.default.createElement(
 	        'div',
 	        { className: tmp },
@@ -24697,7 +24697,7 @@
 	  value: true
 	});
 	var blockState = exports.blockState = {
-	  'blockState': false
+	  'blockState': true
 	};
 
 /***/ },

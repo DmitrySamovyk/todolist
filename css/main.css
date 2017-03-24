@@ -37,9 +37,11 @@ div[data-reactroot] {
   background-color: #fff;
   opacity: 0;
   min-width: 400px;
-  transition: .5s; }
+  transition: .5s;
+  visibility: hidden; }
   .new-task.active {
-    opacity: 1; }
+    opacity: 1;
+    visibility: visible; }
   .new-task h1 {
     font-size: 14px;
     font-weight: 100;

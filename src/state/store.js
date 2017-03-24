@@ -1,3 +1,3 @@
 export const blockState = {
-  'blockState': false
+  'blockState': true
 }

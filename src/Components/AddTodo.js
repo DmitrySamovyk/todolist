@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 class AddTodo extends Component {
   render() {
-    const tmp = this.props.blockState ? "new-task active" : "new-task";
+    const tmp = this.props.blockState ? "new-task" : "new-task active";
     return (
       <div className={tmp}>
         <div className="add-task-block">
