@@ -24,14 +24,6 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-  visibleTodos: PropTypes.arrayOf(PropTypes.shape({
-    text: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
-    index: PropTypes.number.isRequired
-  }))
-};
-
 function select(state) {
   return {
     todos: state.todos,

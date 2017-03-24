@@ -24040,14 +24040,6 @@
 	  return App;
 	}(_react.Component);
 
-	App.propTypes = {
-	  visibleTodos: _react.PropTypes.arrayOf(_react.PropTypes.shape({
-	    text: _react.PropTypes.string.isRequired,
-	    completed: _react.PropTypes.bool.isRequired,
-	    index: _react.PropTypes.number.isRequired
-	  }))
-	};
-
 	function select(state) {
 	  return {
 	    todos: state.todos,
@@ -24480,19 +24472,6 @@
 
 	exports.default = TodoList;
 
-
-	TodoList.propTypes = {
-	  onTodoClick: _react.PropTypes.func.isRequired,
-	  todos: _react.PropTypes.arrayOf(_react.PropTypes.shape({
-	    onClick: _react.PropTypes.func.isRequired,
-	    onRemove: _react.PropTypes.func.isRequired,
-	    index: _react.PropTypes.number.isRequired,
-	    text: _react.PropTypes.string.isRequired,
-	    completed: _react.PropTypes.bool.isRequired,
-	    isEdit: _react.PropTypes.bool.isRequired
-	  }).isRequired).isRequired
-	};
-
 /***/ },
 /* 225 */
 /***/ function(module, exports, __webpack_require__) {
@@ -24652,7 +24631,7 @@
 	}
 
 	function todos() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { initialTodoState: _store.initialTodoState };
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	  var action = arguments[1];
 
 
@@ -24717,10 +24696,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var initialTodoState = exports.initialTodoState = {
-	  'todos': []
-	};
-
 	var blockState = exports.blockState = {
 	  'blockState': false
 	};

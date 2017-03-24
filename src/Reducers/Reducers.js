@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { ADD_TODO, ACTION_TODO, REMOVE_TODO, NEW_TASK_BLOCK_TOGGLE, EDITABLE_TODO, SAVE_TODO } from '../Actions/Actions';
-import { initialTodoState, blockState } from '../state/store';
+import {  blockState } from '../state/store';
 
 function newTaskToggle(state = {blockState}, action) {
   switch (action.type) {
@@ -14,7 +14,7 @@ function newTaskToggle(state = {blockState}, action) {
   }
 }
 
-function todos(state = {initialTodoState}, action) {
+function todos(state = [], action) {
 
   switch (action.type) {
     case ADD_TODO: {
